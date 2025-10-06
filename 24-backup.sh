@@ -11,6 +11,7 @@ DEST_DIR=$2
 LOGS_FOLDER="/var/log/shell-script"
 SCRIPT_NAME=$(basename "$0" .sh)
 LOG_FILE="$LOGS_FOLDER/${SCRIPT_NAME}.log"
+DAYS=$(3:-14) # if not provided considered as 14 days
 
 mkdir -p "$LOGS_FOLDER"
 echo -e "Script started executed at: $(date) " | tee -a "$LOG_FILE"
@@ -37,3 +38,11 @@ if [ ! -d $DEST_DIR ]; then
    echo -e "$R Destination $DEST_DIR does not exist $N"
    exit
 fi   
+
+FILES=$(find $SOURCE_DIR -name "*log" -type f -ntime +14)
+
+if [ ! -z "$(FILES)" ]; then
+   echo "Files found"
+else
+    echo "No files to archeive ... $V SKIPPING $N"
+fi
