@@ -7,11 +7,11 @@ Y="\e[33m"
 N="\e[0m"
 
 LOGS_FOLDER="/var/log/shell-script"
-SCRIPT_NAME=$(basename "$0")
-LOG_FILE="$LOGS_FOLDER/${SCRIPT_NAME%.sh}.log"
+SCRIPT_NAME=$( echo $0 | cut -d "." -fi )
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME%.sh.log"
 
 mkdir -p "$LOGS_FOLDER"
-echo -e "${Y}Script started at: $(date)${N}" | tee -a "$LOG_FILE"
+echo -e "Script started executed at: $(date) " | tee -a "$LOG_FILE"
 
 SOURCE_DIR="/home/ec2-user/app-logs"
 

@@ -1,25 +1,28 @@
 #!/bin/bash
 
 USERID=$(id -u)
-SCRIPT_NAME=$(basename "$0")
-SOURCE_DIR=$1
-DEST_DIR=$2
-DAYS=${3:-14} # If not provided, default is 14 days
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+N="\e[0m"
 
 LOGS_FOLDER="/var/log/shell-script"
-LOG_FILE="${LOGS_FOLDER}/${SCRIPT_NAME}_log"
-echo "Script started executed at: $(date)" | tee -a "$LOG_FILE"
+SCRIPT_NAME=$( echo $0 | cut -d "." -fi )
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME%.sh.log"
 
-if [ "$USERID" -ne 0 ]; then
-    echo "ERROR: Please run this script with root privilege"
-    exit 1 # Failure if user is not root
+mkdir -p "$LOGS_FOLDER"
+echo -e "Script started executed at: $(date) " | tee -a "$LOG_FILE"
+
+if [ $USERID -ne 0 ]; then
+    echo -e "$R ERROR:: Please run this script with root privilege $N"
+    exit 1
 fi
-
-USAGE() {
-    echo "USAGE: sudo $SCRIPT_NAME <SOURCE_DIR> <DEST_DIR> [optional: days, default 14]"
+ 
+USAGE(){
+    echo"USAGE:: sudo sh 24-backup.sh <SOURCE_DIR> <DEST_DIR> <DAYS>[optional],default 14 days]"
     exit 1
 }
 
 if [ $# -lt 2 ]; then
-    USAGE
+   USAGE
 fi
