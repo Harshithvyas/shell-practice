@@ -8,7 +8,7 @@ N="\e[0m"
 
 LOGS_FOLDER="/var/log/shell-script"
 SCRIPT_NAME=$( echo $0 | cut -d "." -fi )
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME%.sh.log"
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME%.sh.log" #/var/log/shell-script/16.logs.sh
 
 mkdir -p "$LOGS_FOLDER"
 echo -e "Script started executed at: $(date) " | tee -a "$LOG_FILE"
@@ -16,19 +16,10 @@ echo -e "Script started executed at: $(date) " | tee -a "$LOG_FILE"
 SOURCE_DIR="/home/ec2-user/app-logs"
 
 if [ ! -d "$SOURCE_DIR" ]; then
-    echo -e "${Y}Directory $SOURCE_DIR not found. Creating now...${N}" | tee -a "$LOG_FILE"
-    mkdir -p "$SOURCE_DIR"
-    echo -e "${G}Created directory: $SOURCE_DIR${N}" | tee -a "$LOG_FILE"
+    echo -e "ERROR":: $SOURCE_DIR does not exist"
+    exit 1
 fi
 
 FILES_TO_DELETE=$(find "$SOURCE_DIR" -name "*.log" -type f -mtime +14)
 
-if [ -z "$FILES_TO_DELETE" ]; then
-    echo -e "${Y}No old log files found to delete.${N}" | tee -a "$LOG_FILE"
-else
-    while IFS= read -r filepath; do
-        echo -e "${R}Deleting file: $filepath${N}" | tee -a "$LOG_FILE"
-        rm -f "$filepath"
-    done <<< "$FILES_TO_DELETE"
-    echo -e "${G}Old log files deleted successfully.${N}" | tee -a "$LOG_FILE"
-fi
+
