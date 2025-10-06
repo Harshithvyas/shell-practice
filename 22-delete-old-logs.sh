@@ -25,4 +25,4 @@ FILES_TO_DELETE=$(find $SOURCE_DIR -name "*.log" -type f -mtime +14)
 while IFS= read -r filepath
 do
   echo "Deleting the file: $filepath"
-done >>> $FILES_TO_DELETE
+done <<< $FILES_TO_DELETE
