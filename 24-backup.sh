@@ -39,10 +39,14 @@ if [ ! -d $DEST_DIR ]; then
    exit
 fi   
 
-FILES=$(find $SOURCE_DIR -name "*log" -type f -ntime +14)
+FILES=$(find $SOURCE_DIR -name "*log" -type f -ntime +$DAYS)
 
 if [ ! -z "$(FILES)" ]; then
-   echo "Files found"
+   echo "Files found: $FILES" 
+   TIMESTAMP=$(date +%F-%H-%M) 
+   ZIP_FILE_NAME="$DEST_DIR"/app-log-$TIMESTAMP.zip"
+   echo "Zip file name: $ZIP_FILE_NAME"
+   echo $FILES | zip -@ -j "$ZIP_FILE_NAME"
 else
-    echo "No files to archeive ... $V SKIPPING $N"
+    echo -e "No files to archeive ... $V SKIPPING $N"
 fi
